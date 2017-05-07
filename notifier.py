@@ -33,7 +33,8 @@ speak("Welcome to Noti Pi -- listening for commands")
 #set the queue we get commands from
 queue=s.SQS_QUEUE
 #our main control loop
-while True:
+running=True
+while running:
     #get messages containing JSON from SQS (20 second long poll)
     resp=sqs.receive_message(QueueUrl=queue,WaitTimeSeconds=20)
     print(resp)
@@ -48,6 +49,10 @@ while True:
                     #handle the command
                     if c=='speak':
                         speak(cmd['text'])
+                    elif c=='update':
+                        speak("Updating software as requested")
+                        time.sleep(5)
+                        running=False
                 except:
                     speak(msg['Body']) #if not in json, just speak it
             except:
