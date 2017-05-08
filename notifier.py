@@ -1,6 +1,6 @@
 #
 # Simple Alexa Spoken Notification Demo
-# Scott Bennett, 1/17
+# Scott Bennett, 5/17
 #
 
 import boto3
