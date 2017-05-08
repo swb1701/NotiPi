@@ -50,7 +50,7 @@ while running:
                     if c=='speak':
                         speak(cmd['text'])
                     elif c=='update':
-                        speak("Updating software as requested")
+                        speak("Updating software")
                         time.sleep(5)
                         running=False
                 except:
