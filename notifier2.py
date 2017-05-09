@@ -24,8 +24,8 @@ polly=uesess.client('polly') #for our speech synthesis
 sqs=uesess.client('sqs') #for receiving commands
 
 #speak some text (on Alexa)
-def speak(text):
-    resp=polly.synthesize_speech(OutputFormat='mp3',TextType='ssml',Text='<prosody volume="x-loud">'+text+'</prosody>',VoiceId='Salli')
+def speak(text,voice='Salli'):
+    resp=polly.synthesize_speech(OutputFormat='mp3',TextType='ssml',Text='<prosody volume="x-loud">'+text+'</prosody>',VoiceId=voice)
     mp3file=open('notify.mp3','w')
     mp3file.write(resp['AudioStream'].read())
     mp3file.close()
@@ -68,7 +68,10 @@ while running:
                     if 'alarm' in cmd:
                         play('alarms/'+cmd['alarm'])
                     if c=='speak':
-                        speak(cmd['text'])
+                        if 'voice' in cmd:
+                                speak(cmd['text'],cmd['voice'])
+                        else:
+                                speak(cmd['text'])
                     elif c=='update':
                         speak("Updating software")
                         time.sleep(5)
