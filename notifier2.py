@@ -25,7 +25,7 @@ sqs=uesess.client('sqs') #for receiving commands
 
 #speak some text (on Alexa)
 def speak(text):
-    resp=polly.synthesize_speech(OutputFormat='mp3',Text='<prosody volume="x-loud">'+text+'</prosody>',VoiceId='Salli')
+    resp=polly.synthesize_speech(OutputFormat='mp3',TextType='ssml',Text='<prosody volume="x-loud">'+text+'</prosody>',VoiceId='Salli')
     mp3file=open('notify.mp3','w')
     mp3file.write(resp['AudioStream'].read())
     mp3file.close()
