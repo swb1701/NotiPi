@@ -47,7 +47,7 @@ def in_between(now, start, end):
     else: # over midnight e.g., 23:30-04:15
         return start <= now or now < end        
 
-quietstart = datetime.time(12,15)
+quietstart = datetime.time(0,15)
 quietstop = datetime.time(6)
 freq = 44100    # audio CD quality
 bitsize = -16   # unsigned 16 bit
