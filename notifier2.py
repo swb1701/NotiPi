@@ -10,6 +10,7 @@ import sys
 import os
 import json
 import time
+import datetime
 
 import secrets as s #import our keys and such
 
@@ -32,12 +33,22 @@ def speak(text,voice='Salli'):
     play("notify.mp3")
 
 def play(filename):
+    if in_between(datetime.datetime.now().time(),quietstart,quietstop):
+        return
     clock=pg.time.Clock()
     pg.mixer.music.load(filename)
     pg.mixer.music.play()
     while pg.mixer.music.get_busy():
         clock.tick(30)
+        
+def in_between(now, start, end):
+    if start <= end:
+        return start <= now < end
+    else: # over midnight e.g., 23:30-04:15
+        return start <= now or now < end        
 
+quietstart = datetime.time(1,15)
+quietstop = datetime.time(6)
 freq = 44100    # audio CD quality
 bitsize = -16   # unsigned 16 bit
 channels = 2    # 1 is mono, 2 is stereo
