@@ -1,5 +1,5 @@
 #
-# Simple Alexa Spoken Notification Demo (Variant to Use HTTPS Request from Notify Server)
+# Simple Alexa Spoken Notification Demo (Variant to Use HTTPS Request from Notify Server Instead of Direct SQS Access)
 # Scott Bennett, 5/17
 #
 
@@ -10,6 +10,8 @@ import os
 import json
 import time
 import urllib2
+import time
+import datetime
 
 import secrets as s #import our keys and such
 
@@ -31,12 +33,16 @@ def speak(text):
     play("notify.mp3")
 
 def play(filename):
+    if in_between(datetime.datetime.now().time(),quietstart,quietstop):
+        return
     clock=pg.time.Clock()
     pg.mixer.music.load(filename)
     pg.mixer.music.play()
     while pg.mixer.music.get_busy():
         clock.tick(30)
-
+        
+quietstart = datetime.time(0,15)
+quietstop = datetime.time(6)
 freq = 44100    # audio CD quality
 bitsize = -16   # unsigned 16 bit
 channels = 2    # 1 is mono, 2 is stereo

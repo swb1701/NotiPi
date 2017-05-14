@@ -1,5 +1,5 @@
 #
-# Simple Alexa Spoken Notification Demo
+# Simple Alexa Spoken Notification Demo (Variant Using Pygame for Continuous Audio and Volume Control)
 # PyGame Version
 # Scott Bennett, 5/17
 #
