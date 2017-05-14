@@ -10,7 +10,6 @@ import os
 import json
 import time
 import urllib2
-import time
 import datetime
 
 import secrets as s #import our keys and such
@@ -72,6 +71,7 @@ while running:
                 speak(cmd['text'])
             elif c=='update':
                 speak("Updating software")
+                print("Updating software")
                 time.sleep(5)
                 running=False
         except:
