@@ -40,6 +40,12 @@ def play(filename):
     while pg.mixer.music.get_busy():
         clock.tick(30)
         
+def in_between(now, start, end):
+    if start <= end:
+        return start <= now < end
+    else: # over midnight e.g., 23:30-04:15
+        return start <= now or now < end        
+        
 quietstart = datetime.time(0,15)
 quietstop = datetime.time(6)
 freq = 44100    # audio CD quality
