@@ -84,3 +84,4 @@ while running:
             speak(msg) #if not in json, just speak it
     except Exception,e:
         print str(e)
+        time.sleep(10)
