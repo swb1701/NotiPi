@@ -59,10 +59,10 @@ speak("Welcome to Noti Pi -- listening for commands")
 #our main control loop
 running=True
 while running:
-    #get messages containing JSON from the Notify server (see https://github.com/swb1701/Notify)
-    resp=urllib2.urlopen(s.NOTIFY_URL)
-    msg=resp.read()
     try:
+        #get messages containing JSON from the Notify server (see https://github.com/swb1701/Notify)
+        resp=urllib2.urlopen(s.NOTIFY_URL)
+        msg=resp.read()
         #parse the json of the message
         try:
             cmd=json.loads(msg) #illustrating use of json for more complex commands
