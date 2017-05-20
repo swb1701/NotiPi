@@ -82,5 +82,5 @@ while running:
                 running=False
         except:
             speak(msg) #if not in json, just speak it
-    except:
-        None
+    except Exception,e:
+        print str(e)
