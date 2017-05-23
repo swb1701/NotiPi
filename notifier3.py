@@ -61,7 +61,7 @@ running=True
 while running:
     try:
         #get messages containing JSON from the Notify server (see https://github.com/swb1701/Notify)
-        resp=urllib2.urlopen(s.NOTIFY_URL, timeout=1)
+        resp=urllib2.urlopen(s.NOTIFY_URL, timeout=60)
         msg=resp.read()
         #parse the json of the message
         try:
