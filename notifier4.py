@@ -153,7 +153,7 @@ while running:
         btle_result=btle_since(poll)
         print(btle_result)
         poll=millis()
-        data=urllib.urlencode({'token':s.NOTIFY_TOKEN,'key':s.NOTIFY_KEY,'btle':btle_result})
+        data=urllib.urlencode({'token':s.NOTIFY_TOKEN,'key':s.NOTIFY_KEY,'btle':json.dumps(btle_result)})
         req=urllib2.Request(url=s.NOTIFY_BASE_URL,data=data)
         resp=urllib2.urlopen(req, timeout=60)
         msg=resp.read()
