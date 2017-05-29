@@ -59,7 +59,11 @@ def setup_bluetooth():
         0, # 0-filtering disabled, 1-filter out duplicates
         1000  # timeout
     )
-    
+
+def signal_watchdog():
+    os.system("touch /tmp/notifier-alive")
+
+signal_watchdog()    
 devmap={}
 sock = socket(AF_BLUETOOTH, SOCK_RAW, BTPROTO_HCI)
 setup_bluetooth()
@@ -141,8 +145,10 @@ t.start()
 poll=0
 #our main control loop
 running=True
+errcnt=0
 while running:
     try:
+        errcnt=0
         #get messages containing JSON from the Notify server (see https://github.com/swb1701/Notify)
         btle_result=btle_since(poll)
         print(btle_result)
@@ -151,6 +157,7 @@ while running:
         req=urllib2.Request(url=s.NOTIFY_BASE_URL,data=data)
         resp=urllib2.urlopen(req, timeout=60)
         msg=resp.read()
+        signal_watchdog()    
         #parse the json of the message
         try:
             cmd=json.loads(msg) #illustrating use of json for more complex commands
@@ -172,4 +179,8 @@ while running:
             speak(msg) #if not in json, just speak it
     except Exception,e:
         print str(e)
+        errcnt=errcnt+1
+        if (errcnt>12):
+            print("Consecutive error count exceeded, forcing client reload/restart")
+            running=False
         time.sleep(10)
