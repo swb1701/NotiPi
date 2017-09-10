@@ -29,6 +29,41 @@ from socket import (
 
 import secrets as s #import our keys and such
 
+os.system('modprobe w1-gpio')
+os.system('modprobe w1-therm')
+temp_dir = '/sys/bus/w1/devices'
+
+def get_sensor_names():
+    sensors=[]
+    for name in os.listdir(temp_dir):
+        if (not name.startswith('w1')):
+            sensors.append(name)
+    return(sensors)
+
+def get_sensor_lines(name):
+    f=open(temp_dir+'/'+name+'/w1_slave','r')
+    lines=f.readlines()
+    f.close()
+    return(lines)
+
+def get_temps():
+    temps=[]
+    try:
+        for sensor in get_sensor_names():
+            lines=get_sensor_lines(sensor)
+            if lines[0].strip()[-3:]=='YES':
+                out=lines[1].find('t=')
+                if out!=-1:
+                    temp_str=lines[1].strip()[out+2:]
+                    temp_c=float(temp_str)/1000.0
+                    temp_f=temp_c*9.0/5.0+32.0
+                    if (temp_c>0):
+                        map={"type":"temperature","name":sensor,"c":temp_c,"f":temp_f}
+                        temps.append(map)
+    except:
+        pass
+    return(temps)
+    
 def setup_bluetooth():
     #since the code I found doesn't guarantee a previous scan was shut down, use this hack to ensure it is
     p=pexpect.spawn('/usr/bin/bluetoothctl')
@@ -153,7 +188,10 @@ while running:
         btle_result=btle_since(poll)
         print(btle_result)
         poll=millis()
-        data=urllib.urlencode({'token':s.NOTIFY_TOKEN,'key':s.NOTIFY_KEY,'btle':json.dumps(btle_result)})
+        #get temperature reading if available
+        sensors=get_temps()
+        print(sensors)
+        data=urllib.urlencode({'token':s.NOTIFY_TOKEN,'key':s.NOTIFY_KEY,'btle':json.dumps(btle_result),'sensors':json.dumps(sensors)})
         req=urllib2.Request(url=s.NOTIFY_BASE_URL,data=data)
         resp=urllib2.urlopen(req, timeout=60)
         msg=resp.read()
