@@ -32,6 +32,7 @@ import secrets as s #import our keys and such
 os.system('modprobe w1-gpio')
 os.system('modprobe w1-therm')
 temp_dir = '/sys/bus/w1/devices'
+millis = lambda: int(round(time.time()*1000))
 
 def get_sensor_names():
     sensors=[]
@@ -58,7 +59,7 @@ def get_temps():
                     temp_c=float(temp_str)/1000.0
                     temp_f=temp_c*9.0/5.0+32.0
                     if (temp_c>0):
-                        map={"type":"temperature","name":sensor,"c":temp_c,"f":temp_f}
+                        map={"type":"temperature","name":sensor,"c":temp_c,"f":temp_f,"time":millis()}
                         temps.append(map)
     except:
         pass
@@ -102,7 +103,7 @@ signal_watchdog()
 devmap={}
 sock = socket(AF_BLUETOOTH, SOCK_RAW, BTPROTO_HCI)
 setup_bluetooth()
-millis = lambda: int(round(time.time()*1000))
+
 lock=threading.Lock()
 
 def btle_listen():
